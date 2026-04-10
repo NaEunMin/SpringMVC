@@ -70,6 +70,13 @@
             <version>${thymeleaf.version}</version>
         </dependency>
 
+        <!-- Thymeleaf Java8 Time Dialect (#temporals 사용을 위함) -->
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-java8time</artifactId>
+            <version>3.0.4.RELEASE</version>
+        </dependency>
+
         <!-- =================================================
              4. Hibernate Core (JPA 구현체)
              JPA 표준 명세를 실제로 구현하는 ORM 프레임워크입니다.
