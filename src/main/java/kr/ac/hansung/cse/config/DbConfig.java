@@ -18,10 +18,10 @@ import java.util.Properties;
  * 데이터베이스 및 JPA 설정
  *
  * @EnableTransactionManagement : @Transactional 어노테이션 활성화
- * @ComponentScan               : service · repository 패키지의 빈을 자동 등록
+ * @ComponentScan : service · repository 패키지의 빈을 자동 등록
  *
- * 빈 구성 흐름:
- *   DataSource → EntityManagerFactory → TransactionManager
+ *                빈 구성 흐름:
+ *                DataSource → EntityManagerFactory → TransactionManager
  */
 @Configuration
 @EnableTransactionManagement
@@ -39,12 +39,12 @@ public class DbConfig {
     public DataSource dataSource() {
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        ds.setUrl("jdbc:mysql://localhost:3306/productdb" +
-                  "?useSSL=false" +
-                  "&allowPublicKeyRetrieval=true" +
-                  "&serverTimezone=Asia/Seoul" +
-                  "&useUnicode=true" +
-                  "&characterEncoding=UTF-8");
+        ds.setUrl("jdbc:mysql://mysql:3306/productdb" +
+                "?useSSL=false" +
+                "&allowPublicKeyRetrieval=true" +
+                "&serverTimezone=Asia/Seoul" +
+                "&useUnicode=true" +
+                "&characterEncoding=UTF-8");
         ds.setUsername("appuser");
         ds.setPassword("apppass");
         return ds;
@@ -57,11 +57,10 @@ public class DbConfig {
      */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean emf =
-                new LocalContainerEntityManagerFactoryBean();
+        LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(dataSource());
         emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter()); // JPA 구현체: Hibernate
-        emf.setPackagesToScan("kr.ac.hansung.cse.model");         // @Entity 클래스 위치
+        emf.setPackagesToScan("kr.ac.hansung.cse.model"); // @Entity 클래스 위치
         emf.setJpaProperties(hibernateProperties());
         return emf;
     }
@@ -69,8 +68,8 @@ public class DbConfig {
     private Properties hibernateProperties() {
         Properties props = new Properties();
         props.setProperty("hibernate.hbm2ddl.auto",
-                "none");                                  // DDL 자동 실행 안 함 (init.sql이 담당)
-        props.setProperty("hibernate.show_sql",  "true"); // 실행 SQL 콘솔 출력 (학습용)
+                "none"); // DDL 자동 실행 안 함 (init.sql이 담당)
+        props.setProperty("hibernate.show_sql", "true"); // 실행 SQL 콘솔 출력 (학습용)
         props.setProperty("hibernate.format_sql", "true"); // SQL 줄바꿈 출력
         // dialect, allow_jdbc_metadata_access 생략 → Hibernate가 JDBC 메타데이터로 자동 감지
         return props;
