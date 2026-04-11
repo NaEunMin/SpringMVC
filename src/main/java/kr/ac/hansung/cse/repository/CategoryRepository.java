@@ -46,5 +46,9 @@ public class CategoryRepository {
                 .getResultList();
         return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
     }
+
+    public void delete(Category category) {
+        em.remove(em.contains(category) ? category : em.merge(category));
+    }
 }
 

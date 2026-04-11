@@ -45,4 +45,23 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
+    /**
+     * 카테고리 삭제
+     */
+    @Transactional
+    public void deleteCategory(Long id) {
+
+        //결과가 있다면 상품이 연결되어 있다는 것 -> 삭제 불가
+        if(categoryRepository.findByIdWithProducts(id).isPresent()) {
+            throw new IllegalStateException("해당 카테고리에 연결된 상품이 있어 삭제할 수 없습니다.");
+        }
+
+        //카테고리가 없다면 예외처리
+        Category category = categoryRepository.findById(id)
+                        .orElseThrow(()->new IllegalArgumentException("존재하지 않는 카테고리입니다."));
+
+
+        categoryRepository.delete(category);
+    }
+
 }
