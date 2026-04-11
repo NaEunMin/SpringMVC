@@ -1,12 +1,16 @@
 package kr.ac.hansung.cse.controller;
 
+import kr.ac.hansung.cse.exception.DuplicateCategoryException;
 import kr.ac.hansung.cse.model.CategoryForm;
 import kr.ac.hansung.cse.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,7 +29,7 @@ public class CategoryController {
     }
 
     /**
-     * 카테고 등록 폼 표시
+     * 카테고리 등록 폼 표시
      */
     @GetMapping("/create")
     public String showCategoryForm(Model model) {
@@ -33,4 +37,27 @@ public class CategoryController {
         return "categoryForm";
     }
 
+    /**
+     * 카테고리 등록 로직
+     */
+    @PostMapping("/create")
+    public String createCategory(
+            CategoryForm categoryForm,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return "categoryForm";
+        }
+        try {
+            categoryService.createCategory(categoryForm);
+        } catch (DuplicateCategoryException e) {
+            //오류핸들링
+            bindingResult.rejectValue("name", "duplicate", e.getMessage());
+            return "categoryForm";
+        }
+        //정상상황에서 등록완료알림
+        redirectAttributes.addFlashAttribute("successMessage",
+                "'" + categoryForm.getName() + "' 카테고리가 등록되었습니다.");
+        return "redirect:/categories";
+    }
 }
