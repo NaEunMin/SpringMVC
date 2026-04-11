@@ -1,5 +1,6 @@
 package kr.ac.hansung.cse.controller;
 
+import kr.ac.hansung.cse.model.CategoryForm;
 import kr.ac.hansung.cse.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,15 @@ public class CategoryController {
     public String getCategories(Model model) {
         model.addAttribute("categories", categoryService.getAllCategories());
         return "categoryList";
+    }
+
+    /**
+     * 카테고 등록 폼 표시
+     */
+    @GetMapping("/create")
+    public String showCategoryForm(Model model) {
+        model.addAttribute("categoryForm", new CategoryForm());
+        return "categoryForm";
     }
 
 }
