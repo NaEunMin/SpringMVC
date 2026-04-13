@@ -50,7 +50,25 @@
 
     <a class="btn" th:href="@{/products/create}">+ 새 상품 등록</a>
 
-    <div class="empty-msg" th:if="${#lists.isEmpty(products)}">
+    <!-- 추가된 검색 & 필터 폼 영역 -->
+    <form th:action="@{/products}" method="get" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center; background: #f8f9fa; padding: 15px; border-radius: 5px; border: 1px solid #e9ecef;">
+        <select name="categoryId" style="padding: 8px; border-radius: 4px; border: 1px solid #ced4da; min-width: 150px;">
+            <option value="">-- 전체 카테고리 --</option>
+            <option th:each="cat : ${categories}" 
+                    th:value="${cat.id}" 
+                    th:text="${cat.name}"
+                    th:selected="${cat.id == categoryId}"></option>
+        </select>
+        <input type="text" name="keyword" th:value="${keyword}" placeholder="상품명 검색" style="padding: 8px; border-radius: 4px; border: 1px solid #ced4da; flex-grow: 1;" />
+        <button type="submit" class="btn" style="margin-bottom: 0;">검색</button>
+        <a th:href="@{/products}" class="btn" style="margin-bottom: 0; background: #6c757d; text-decoration: none; text-align: center;">초기화</a>
+    </form>
+
+    <!-- 검색 결과 없음 처리 메시지 -->
+    <div class="empty-msg" th:if="${#lists.isEmpty(products) and (keyword != null or categoryId != null)}">
+        검색 결과가 없습니다.
+    </div>
+    <div class="empty-msg" th:if="${#lists.isEmpty(products) and keyword == null and categoryId == null}">
         등록된 상품이 없습니다. 새 상품을 등록해 주세요.
     </div>
 
