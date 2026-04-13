@@ -135,18 +135,22 @@ public class ProductRepository {
     /**
      * 상품 검색
      * 이름 검색 : JPQL의 LIKE로 키워드 포함 검사
+     * JOIN FETCH를 통해 N+1 및 LazyInitializationException 방지
      */
     public List<Product> findByNameContaining(String keyword) {
-        return entityManager.createQuery("SELECT p FROM Product p WHERE p.name LIKE :keyword", Product.class)
+        return entityManager.createQuery(
+                "SELECT p FROM Product p LEFT JOIN FETCH p.category WHERE p.name LIKE :keyword", Product.class)
                 .setParameter("keyword","%"+keyword+"%")
                 .getResultList();
     }
 
     /**
      * 카테고리 필터
+     * JOIN FETCH를 통해 N+1 및 LazyInitializationException 방지
      */
     public List<Product> findByCategoryId(Long categoryId) {
-        return entityManager.createQuery("SELECT p FROM Product p WHERE p.category.id = :cid", Product.class)
+        return entityManager.createQuery(
+                "SELECT p FROM Product p LEFT JOIN FETCH p.category WHERE p.category.id = :cid", Product.class)
                 .setParameter("cid", categoryId)
                 .getResultList();
     }
