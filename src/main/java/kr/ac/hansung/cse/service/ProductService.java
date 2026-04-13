@@ -133,4 +133,22 @@ public class ProductService {
     public void deleteProduct(Long id) {
         productRepository.delete(id);
     }
+
+    /**
+     * 이름으로 상품 검색
+     */
+    public List<Product> searchProduct(String keyword) {
+        return productRepository.findByNameContaining(keyword);
+    }
+
+    /**
+     * 카테고리 필터링
+     */
+    public List<Product> searchByCategory(Long categoryId) {
+        return productRepository.findByCategoryId(categoryId);
+    }
+
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
+    }
 }
